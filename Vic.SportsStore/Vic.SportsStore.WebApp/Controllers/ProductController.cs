@@ -11,11 +11,11 @@ namespace Vic.SportsStore.WebApp.Controllers
 {
     public class ProductController : Controller
     {
-        private IProductsRepository repository = new InMemoryProductRepository();
+        public IProductsRepository Repository { get; set; }
 
         public ViewResult List()
         {
-            return View(repository.Products);
+            return View(Repository.Products);
         }
     }
 }
