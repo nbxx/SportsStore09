@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Vic.SportsStore.Domain.Abstract;
 using Vic.SportsStore.Domain.Concrete;
+using Vic.SportsStore.Domain.Entities;
 
 namespace Vic.SportsStore.WebApp.Controllers
 {
@@ -12,10 +13,9 @@ namespace Vic.SportsStore.WebApp.Controllers
     {
         private IProductsRepository repository = new InMemoryProductRepository();
 
-        // GET: Product
-        public ActionResult Index()
+        public ViewResult List()
         {
-            return View();
+            return View(repository.Products);
         }
     }
 }
