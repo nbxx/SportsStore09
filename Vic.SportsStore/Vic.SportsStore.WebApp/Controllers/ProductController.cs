@@ -11,11 +11,19 @@ namespace Vic.SportsStore.WebApp.Controllers
 {
     public class ProductController : Controller
     {
+        public const int PageSize = 3;
+
         public IProductsRepository Repository { get; set; }
 
-        public ViewResult List()
+        public ViewResult List(int page = 1)
         {
-            return View(Repository.Products);
+            var result = Repository
+                .Products
+                .OrderBy(p => p.ProductId)
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize);
+
+            return View(result);
         }
     }
 }
