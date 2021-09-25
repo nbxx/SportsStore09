@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vic.SportsStore.Domain.Abstract;
 using Vic.SportsStore.Domain.Entities;
+using System.IO;
 
 namespace Vic.SportsStore.Domain.Concrete
 {
@@ -31,6 +32,11 @@ namespace Vic.SportsStore.Domain.Concrete
 
                 if (emailSettings.WriteAsFile)
                 {
+                    if (!Directory.Exists(emailSettings.FileLocation))
+                    {
+                        Directory.CreateDirectory(emailSettings.FileLocation);
+                    }
+
                     smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
                     smtpClient.PickupDirectoryLocation = emailSettings.FileLocation;
                     smtpClient.EnableSsl = false;
