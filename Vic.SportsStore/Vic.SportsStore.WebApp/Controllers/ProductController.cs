@@ -44,5 +44,22 @@ namespace Vic.SportsStore.WebApp.Controllers
 
             return View(vm);
         }
+
+        public FileContentResult GetImage(int productId)
+        {
+            Product prod = Repository
+                .Products
+                .FirstOrDefault(p => p.ProductId == productId);
+
+            if (prod != null)
+            {
+                return File(prod.ImageData, prod.ImageMimeType);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }

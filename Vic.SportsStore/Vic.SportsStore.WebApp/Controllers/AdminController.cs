@@ -8,6 +8,7 @@ using Vic.SportsStore.Domain.Entities;
 
 namespace Vic.SportsStore.WebApp.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private IProductsRepository repository;
@@ -32,21 +33,44 @@ namespace Vic.SportsStore.WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product)
+        public ActionResult Edit(Product product, HttpPostedFileBase image = null)
         {
             if (ModelState.IsValid)
             {
+                if (image != null)
+                {
+                    product.ImageMimeType = image.ContentType;
+                    product.ImageData = new byte[image.ContentLength];
+                    image.InputStream.Read(product.ImageData, 0, image.ContentLength);
+                }
                 repository.SaveProduct(product);
-                TempData["message"] = $"{product.Name} has been saved";
+                TempData["message"] = string.Format("{0} has been saved", product.Name);
                 return RedirectToAction("Index");
             }
             else
             {
-                // there is something wrong with the data values
                 return View(product);
             }
         }
 
+
+        public ViewResult Create()
+        {
+            return View("Edit", new Product());
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int productId)
+        {
+            Product deletedProduct = repository.DeleteProduct(productId);
+
+            if (deletedProduct != null)
+            {
+                TempData["message"] = string.Format("{0} was deleted", deletedProduct.Name);
+            }
+
+            return RedirectToAction("Index");
+        }
 
     }
 }
